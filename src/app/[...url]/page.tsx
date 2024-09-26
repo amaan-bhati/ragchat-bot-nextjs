@@ -21,6 +21,7 @@ const Page = async ({ params }: PageProps) => {
   await ragChat.context.add({
     type: "html",
     source: reconstructedUrl,
+    config: { chunkOverlap: 50, chunkSize: 200},
   });
   return <p>access to the external url</p>;
 };
