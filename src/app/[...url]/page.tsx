@@ -1,13 +1,28 @@
-interface PageProps{
-    params:{
-        url: string | string[] | undefined
-    }
+import { ragChat } from "@/lib/rag-chat";
+
+interface PageProps {
+  params: {
+    url: string | string[] | undefined;
+  };
 }
 
-const Page = ({params}: PageProps) => {
+function reconstructUrl({ url }: { url: string[] }) {
+  const decodedComponents = url.map((component) =>
+    decodeURIComponent(component)
+  );
 
-
-    return <p>access to the external url</p>
+  return decodedComponents.join("/");
 }
 
-export default Page
+const Page = async ({ params }: PageProps) => {
+  console.log(params);
+  const reconstructedUrl = reconstructUrl({ url: params.url as string[] });
+
+  await ragChat.context.add({
+    type: "html",
+    source: reconstructedUrl,
+  });
+  return <p>access to the external url</p>;
+};
+
+export default Page;
